@@ -1,0 +1,76 @@
+#!/bin/bash
+
+
+declare -a arrayOfNValues
+let maxTValue=10**5; readonly maxTValue
+let maxNValue=10**9; readonly maxNValue
+
+
+function inputVariables () {
+    read numTestCases
+    intRegex='^[0-9]+$'
+    if ! [[ $numTestCases =~ $intRegex ]] || [[ $numTestCases -gt $maxTValue ]] || [[ $numTestCases -lt 1 ]]
+    then
+        echo "Invalid T Value. 1<=T<=10^5. Input: $numTestCases" >&2
+        exit 1
+    else
+        local index=0
+        while [ $index -lt $numTestCases ]
+        do
+            local N
+            read N
+            one=1
+            if ! [[ $N =~ $intRegex ]] || [[ $N -gt $maxNValue ]] || [[ $N -lt 1 ]]
+            then
+                echo "Invalid N Value: $N" >&2
+                exit 1
+            else
+                arrayOfNValues[$index]=$N
+                let index+=1
+            fi
+        done
+    fi
+}
+
+function totalSumOfMultiplesBelowN () {
+    local length=${#arrayOfNValues[@]}
+    local index=0
+    while [ "$index" -lt "$length" ]
+    do
+        currentNValue="${arrayOfNValues[$index]}"
+        totalSum=$(sum $currentNValue)
+        echo $totalSum
+        let index+=1
+    done
+    # currentN=0
+    # for currentN in "${arrayOfNValues[@]}"
+    # do
+    #   totalSum=$(sum "$currentN")
+    #   echo $totalSum
+    # done
+}
+
+function sum() {
+    local nValue=$1
+    local sum=0
+    for (( i=1; ((i <= $nValue)); i++ ))
+    do
+        if [[ $i%3 -eq 0 ]] || [[ $i%5 -eq 0 ]]
+        then
+            let sum+=$(($i))
+        fi
+        echo $sum
+    done
+    echo $sum
+
+}
+
+
+if [[ $# > 0 ]]
+then
+    echo "Invalid Arguments Passed: $0" >&2
+else
+    # inputVariables
+    # totalSumOfMultiplesBelowN
+    sum 1000000
+fi
