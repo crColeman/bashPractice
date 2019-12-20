@@ -1,0 +1,17 @@
+#!/bin/bash
+
+LOG_PATH='./usageLog'
+
+DATE=`date +"%D %T"`
+echo "DATA FROM: $DATE" >>$LOG_PATH
+NR_PROCESS=`ps -N -u root | wc -l`
+echo "Number of Non-Root Processes: $NR_PROCESS" >>$LOG_PATH
+TOTAL_MEM=`free -m | awk '{print $2}' | head -2 | tail -1 `
+USED_MEM=`free -m | awk '{print $3}' | head -2 | tail -1`
+USED_PERCENT=$(( 100*USED_MEM / TOTAL_MEM ))
+echo "Percentage Used Memory: $USED_PERCENT%" >> $LOG_PATH
+
+NUM_USR=`who | wc -l`
+echo "Number of Users Logged In: $NUM_USR" >> $LOG_PATH
+echo "------END OF SAMPLE------" >> $LOG_PATH
+echo >> $LOG_PATH
